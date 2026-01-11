@@ -3,7 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/opt/libdragon/mips64-elf/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
