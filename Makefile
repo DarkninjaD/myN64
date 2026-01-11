@@ -19,11 +19,14 @@ FILESYSTEM_DIR := filesystem
 
 # -------------------------------------------------
 # Assets
-#   Find and convert
+#   Find all assets and convert
 # -------------------------------------------------
 assets_png = $(wildcard $(ASSETS_DIR)/*.png)
+assets_ttf = $(wildcard $(ASSETS_DIR)/*.ttf)
+
 assets_conv = \
-	$(addprefix $(FILESYSTEM_DIR)/, $(notdir $(assets_png:%.png=%.sprite)))
+	$(addprefix $(FILESYSTEM_DIR)/, $(notdir $(assets_png:%.png=%.sprite))) \
+	$(addprefix $(FILESYSTEM_DIR)/, $(notdir $(assets_ttf:%.ttf=%.font64)))
 
 
 # -------------------------------------------------
@@ -67,6 +70,14 @@ $(FILESYSTEM_DIR)/%.sprite: $(ASSETS_DIR)/%.png
 	@echo "    [SPRITE] $@"
 	@$(N64_MKSPRITE) -f RGBA16 -o "$(dir $@)" "$<"
 
+# -------------------------------------------------
+# Font rule
+#   use mkfont to create compatible N64 sprites
+# -------------------------------------------------
+$(FILESYSTEM_DIR)/%.font64: $(ASSETS_DIR)/%.ttf
+	@mkdir -p $(dir $@)
+	@echo "    [FONT] $@"
+	@$(N64_MKFONT) -o "$(dir $@)" "$<"
 # -------------------------------------------------
 # Clean rule
 #   remove all build artifacts
