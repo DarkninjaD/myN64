@@ -48,12 +48,15 @@ void menuHandleInput() {
   case NO_ACTION:
     break;
   case SELECT:
+    menuState.action = NO_ACTION;
     break;
   case UP:
     if (menuState.overItemIndex > 0) menuState.overItemIndex--;
+    menuState.action = NO_ACTION;
     break;
   case DOWN:
     if (menuState.overItemIndex < BUTTON_COUNT-1) menuState.overItemIndex++;
+    menuState.action = NO_ACTION;
     break;
   default:
     break;
@@ -84,6 +87,19 @@ void menuInput(joypad_inputs_t pOne) {
     menuState.action = UP;
   }
   if(pOne.btn.d_down || pOne.stick_x < -40) {
+    menuState.action = DOWN;
+  }
+  menuHandleInput();
+}
+
+void menuInputTest(joypad_buttons_t pOne) {
+  if(pOne.a || pOne.start) {
+    menuState.action = SELECT;
+  }
+  if(pOne.d_up) {
+    menuState.action = UP;
+  }
+  if(pOne.d_down) {
     menuState.action = DOWN;
   }
   menuHandleInput();

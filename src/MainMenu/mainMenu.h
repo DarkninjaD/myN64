@@ -6,6 +6,8 @@ void menuHandlerInit();
 
 void menuInput(joypad_inputs_t pOne);
 
+void menuInputTest(joypad_buttons_t pOne);
+
 void menuRender();
 
 #endif

@@ -88,16 +88,22 @@ int main(void) {
   static sprite_t *spaceship;
   spaceship = sprite_load("rom:/spaceship.sprite");
 
-  joypad_inputs_t playerOne;
+  //joypad_inputs_t playerOne;
+  joypad_buttons_t playerOneBtn;
+
   menuHandlerInit();
+
 
   while(1) {
     surface_t *disp = display_get();
     joypad_poll();
-    playerOne = joypad_get_inputs(JOYPAD_PORT_1);
+    //playerOne = joypad_get_inputs(JOYPAD_PORT_1);
+    playerOneBtn = joypad_get_buttons_pressed(JOYPAD_PORT_1);
+
     rdpq_attach_clear(disp, NULL);
     menuRender();
-    menuInput(playerOne);
+    //menuInput(playerOne);
+    menuInputTest(playerOneBtn);
     rdpq_detach_show();
   }
 }
