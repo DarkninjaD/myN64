@@ -2,7 +2,7 @@
 #include <libdragon.h>
 #include "Util/consoleMgr.h"
 #include "IntroCredits/introCredits.h"
-#include "MainManu/mainMenu.h"
+#include "MainMenu/mainMenu.h"
 
 enum {
   FONT_SIXTYFOUR = 1,
