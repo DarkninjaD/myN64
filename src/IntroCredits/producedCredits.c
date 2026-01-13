@@ -1,6 +1,6 @@
 #include "introCredits.h"
 #include <libdragon.h>
-#include "../util/consoleMgr.h"
+#include "../Util/consoleMgr.h"
 
 void intro_title_produced_by(void) {
 
