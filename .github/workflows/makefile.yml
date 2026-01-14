@@ -26,13 +26,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             build-essential \
-            git \
             wget \
-            python3 \
-            libmpc-dev \
-            libmpfr-dev \
-            libgmp-dev \
-            texinfo
+            git
 
       # -------------------------
       # Cache libdragon install
@@ -41,10 +36,17 @@ jobs:
         id: cache-libdragon
         uses: actions/cache@v4
         with:
-          path: |
-            /opt/libdragon
-            ~/.cache/libdragon
+          path: /opt/libdragon
           key: libdragon-${{ runner.os }}-v1
+
+      # -------------------------
+      # Install prebuilt toolchain
+      # -------------------------
+      - name: Install N64 toolchain
+        if: steps.cache-libdragon.outputs.cache-hit != 'true'
+        run: |
+          wget https://github.com/DragonMinded/libdragon/releases/latest/download/gcc-toolchain-mips64-x86_64.deb
+          sudo dpkg -i gcc-toolchain-mips64-x86_64.deb
 
       # -------------------------
       # Build & install libdragon
@@ -55,11 +57,9 @@ jobs:
           git clone https://github.com/DragonMinded/libdragon.git
           cd libdragon
           ./build.sh
-          sudo mkdir -p /opt
-          sudo cp -r install /opt/libdragon
 
       # -------------------------
-      # Export toolchain PATH
+      # Export environment
       # -------------------------
       - name: Set environment
         run: |
