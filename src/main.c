@@ -3,14 +3,39 @@
 #include "Util/consoleMgr.h"
 #include "IntroCredits/introCredits.h"
 #include "MainMenu/mainMenu.h"
+#include "ScreenMng/screenMng.h"
 
 enum {
   FONT_SIXTYFOUR = 1,
   FONT_REVALIA = 2,
   FONT_SQUAREWAVE = 3,
 };
+/*
+enum SCREEN_STATE {
+  NO_SCREEN,
+  INIT,
+  INTRO,
+  MAIN_MENU,
+  GAME_INIT,
+  GAME_PLAY,
+  GAME_CUTSCEEN,
+  GAME_PAUSED,
+  GAME_END,
+  SCORE_SCREEN,
+  DEBUG,
+  SCREEN_STATE_COUNT
+};
 
+typedef struct {
+  int currentScreenState;
+  int nextScreenState;
+} screen_state_t;
+  
+*/
 int main(void) {
+  
+  screen_state_t* test = screenMngInit();
+
   /*
   -------------------------------------------------
   System init
@@ -106,4 +131,9 @@ int main(void) {
     menuInputTest(playerOneBtn);
     rdpq_detach_show();
   }
+  /*
+  -------------------------------------------------
+  Main Game screen
+  -------------------------------------------------
+  */
 }
