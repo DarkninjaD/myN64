@@ -17,11 +17,16 @@ typedef enum {
   SCREEN_STATE_COUNT
 } screen_state_e;
 
-typedef struct{
+typedef struct ScreenState {
   int currentScreenState;
   int nextScreenState;
 } screen_state_t ;
 
+/**
+ *  @brief Sets initial for Screen Mangers state machine
+ *
+ *  @return screen_state_t*
+ */
 screen_state_t* screenMngInit();
 screen_state_t* screenMngCurrentState();
 screen_state_t* screenMngSetNext(screen_state_e nextScreenState);

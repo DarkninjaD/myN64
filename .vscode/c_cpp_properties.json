@@ -1,19 +1,27 @@
 {
-    "configurations": [
-        {
-            "name": "Linux",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "/opt/libdragon/mips64-elf/include",
-                "${workspaceFolder}/src/**"
-            ],
-            "defines": [],
-            "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c17",
-            "cppStandard": "gnu++17",
-            "intelliSenseMode": "linux-gcc-x64",
-            "configurationProvider": "ms-vscode.makefile-tools"
-        }
-    ],
-    "version": 4
+  "configurations": [
+    {
+      "name": "N64",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${env:N64_INST}/**",
+        "${env:N64_INST}/include/**",
+        "${env:N64_INST}/mips64-elf/include/**"
+      ],
+      "defines": [
+        "_LANGUAGE_C",
+        "F3DEX_GBI_2",
+        "MIPS",
+        "__mips__",
+        "_MIPS_SZLONG=32",
+        "__MIPS__"
+      ],
+      "compilerPath": "${env:N64_INST}/bin/mips64-elf-gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "gnu++14",
+      "intelliSenseMode": "linux-gcc-x64",
+      "compilerArgs": ["-mabi=32", "-mgp32", "-march=vr4300"]
+    }
+  ],
+  "version": 4
 }

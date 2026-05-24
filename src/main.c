@@ -17,7 +17,6 @@ int main(void) {
   // pull thing from cart
   dfs_init(DFS_DEFAULT_LOCATION);
   fprintf(stdout, "hello");
-
   /*
   -------------------------------------------------
   Asset load
