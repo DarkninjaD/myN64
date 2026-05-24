@@ -1,53 +1,22 @@
 #include <string.h>
 #include <libdragon.h>
+#include <debug.h>
 #include "Util/consoleMgr.h"
-#include "IntroCredits/introCredits.h"
+#include "IntroCredits/introScreen.h"
 #include "MainMenu/mainMenu.h"
 #include "ScreenMng/screenMng.h"
+#include "Util/fontAssets.h"
 
-enum {
-  FONT_SIXTYFOUR = 1,
-  FONT_REVALIA = 2,
-  FONT_SQUAREWAVE = 3,
-};
-/*
-enum SCREEN_STATE {
-  NO_SCREEN,
-  INIT,
-  INTRO,
-  MAIN_MENU,
-  GAME_INIT,
-  GAME_PLAY,
-  GAME_CUTSCEEN,
-  GAME_PAUSED,
-  GAME_END,
-  SCORE_SCREEN,
-  DEBUG,
-  SCREEN_STATE_COUNT
-};
-
-typedef struct {
-  int currentScreenState;
-  int nextScreenState;
-} screen_state_t;
-  
-*/
 int main(void) {
-  
-  screen_state_t* test = screenMngInit();
 
-  /*
-  -------------------------------------------------
-  System init
-  -------------------------------------------------
-  */
-  console_mgr_init();
-  intro_title_produced_by();
+  screen_state_t* screen_state = screenMngInit();
   // Adds the modal to add controller support
   joypad_init();
+  debug_init(DEBUG_FEATURE_ALL);
   rdpq_init();
   // pull thing from cart
   dfs_init(DFS_DEFAULT_LOCATION);
+  fprintf(stdout, "hello");
 
   /*
   -------------------------------------------------
@@ -78,30 +47,6 @@ int main(void) {
     .outline_color = RGBA32 (255,255,255,255),
   });
 
-  /*
-  -------------------------------------------------
-  Intro screen
-  -------------------------------------------------
-  */
-
-  // check that and n64 type controller is in port 1
-  if(joypad_is_connected(JOYPAD_PORT_1) && JOYPAD_STYLE_N64 == joypad_get_style(JOYPAD_PORT_1) ) {
-    puts("       Press start to continue ");
-    joypad_inputs_t inputs;
-    // main loop
-    bool intro_scene = true;
-    while(intro_scene) {
-      joypad_poll();
-      inputs = joypad_get_inputs(JOYPAD_PORT_1);
-      if(inputs.btn.start) {
-        intro_scene = false;
-        console_mgr_close();
-      }
-    }
-  }
-  else {
-    printf("Please add controller to port 1");
-  }
 
   /*
   -------------------------------------------------
@@ -126,14 +71,24 @@ int main(void) {
     playerOneBtn = joypad_get_buttons_pressed(JOYPAD_PORT_1);
 
     rdpq_attach_clear(disp, NULL);
-    menuRender();
-    //menuInput(playerOne);
-    menuInputTest(playerOneBtn);
+
+    switch(screen_state->currentScreenState) {
+      case NO_SCREEN:
+        screenMngLoadNext();
+        break;
+      case INIT:
+        introScreen();
+        screenMngSetNext(MAIN_MENU);
+        break;
+      case MAIN_MENU:
+        menuRender();
+        menuInputTest(playerOneBtn);
+        break;
+      case GAME_PLAY:
+        // Draw gameplay loop here
+        rdpq_text_print(NULL, FONT_SQUAREWAVE, 20, 20, "GAMEPLAY LOADED");
+        break;
+    }
     rdpq_detach_show();
   }
-  /*
-  -------------------------------------------------
-  Main Game screen
-  -------------------------------------------------
-  */
 }

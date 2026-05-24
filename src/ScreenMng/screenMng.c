@@ -8,8 +8,18 @@ screen_state_t* screenMngInit() {
   return &screenState;
 };
 
-void screenMngLoad();
+void screenMngLoadNext() {
+  screenState.currentScreenState = screenState.nextScreenState;
+  screenState.nextScreenState = NO_SCREEN;
+};
 
-void screenMngCurrentState() {
+screen_state_t* screenMngCurrentState() {
+  return &screenState;
+}
 
+screen_state_t* screenMngSetNext(screen_state_e nextScreen) {
+  if (screenState.nextScreenState == NO_SCREEN) {
+    screenState.nextScreenState = MAIN_MENU;
+  }
+  return &screenState;
 }

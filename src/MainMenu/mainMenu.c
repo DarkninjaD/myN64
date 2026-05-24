@@ -14,13 +14,6 @@ typedef struct {
   int action;
 } menu_state_t;
 
-enum MENU_BUTTON {
-  START_BUTTON,
-  SAVE_BUTTON,
-  SETTING_BUTTON,
-  EXIT_BUTTON,
-  BUTTON_COUNT,
-};
 
 enum MENU_ACTION {
   NO_ACTION,
@@ -64,12 +57,12 @@ void menuHandleInput() {
 
 }
 
-void menuButton(sprite_t* sprite, float xCord, float yCord, char* message, enum MENU_BUTTON button_t) {
+void menuButton(sprite_t* sprite, float xCord, float yCord, char* message, menu_button_t button_t) {
 
   // set mode
   rdpq_set_mode_standard();
 
-  // Button Back ground
+  // Button Background
   if(button_t == menuState.overItemIndex) {
     rdpq_sprite_blit(sprite, xCord, yCord, &selectedButtonParams);
   } else {
@@ -92,7 +85,7 @@ void menuInput(joypad_inputs_t pOne) {
   menuHandleInput();
 }
 
-void menuInputTest(joypad_buttons_t pOne) {
+menu_button_t menuInputTest(joypad_buttons_t pOne) {
   if(pOne.a || pOne.start) {
     menuState.action = SELECT;
   }
@@ -103,6 +96,7 @@ void menuInputTest(joypad_buttons_t pOne) {
     menuState.action = DOWN;
   }
   menuHandleInput();
+  return -1;
 }
 
 void menuRender() {

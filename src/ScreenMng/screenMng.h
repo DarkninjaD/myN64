@@ -1,9 +1,8 @@
 
 #ifndef SCREEN_MNG_H
 #define SCREEN_MNG_H
-#include <libdragon.h>
 
-enum SCREEN_STATE {
+typedef enum {
   NO_SCREEN,
   INIT,
   INTRO,
@@ -16,7 +15,7 @@ enum SCREEN_STATE {
   SCORE_SCREEN,
   DEBUG,
   SCREEN_STATE_COUNT
-};
+} screen_state_e;
 
 typedef struct{
   int currentScreenState;
@@ -24,6 +23,8 @@ typedef struct{
 } screen_state_t ;
 
 screen_state_t* screenMngInit();
-void screenMngLoad();
+screen_state_t* screenMngCurrentState();
+screen_state_t* screenMngSetNext(screen_state_e nextScreenState);
+void screenMngLoadNext();
 
 #endif
