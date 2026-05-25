@@ -57,6 +57,7 @@ void menuHandleInput() {
 
 }
 
+//TODO - rename button_t to button_e
 void menuButton(sprite_t* sprite, float xCord, float yCord, char* message, menu_button_e button_t) {
 
   // set mode
@@ -72,6 +73,7 @@ void menuButton(sprite_t* sprite, float xCord, float yCord, char* message, menu_
   rdpq_text_print(NULL,3,xCord+5,yCord+13, message);
 }
 
+// TODO - kill this function and just have menuInputTest Also rename it.
 void menuInput(joypad_inputs_t pOne) {
   if(pOne.btn.a || pOne.btn.start) {
     menuState.action = SELECT;

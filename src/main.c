@@ -16,10 +16,10 @@ int main(void) {
   rdpq_init();
   // pull thing from cart
   dfs_init(DFS_DEFAULT_LOCATION);
-  fprintf(stdout, "hello");
+
   /*
   -------------------------------------------------
-  Asset load
+  Asset load //TODO - This should be pulled into it's own file.
   -------------------------------------------------
   */
   // Font
@@ -49,7 +49,7 @@ int main(void) {
 
   /*
   -------------------------------------------------
-  Main Menu screen
+  Main Menu screen //TODO - maybe a bit of clean up bellow before the while loop.
   -------------------------------------------------
   */
   display_init(RESOLUTION_320x240, DEPTH_16_BPP, 2, GAMMA_NONE, FILTERS_RESAMPLE);
@@ -62,6 +62,7 @@ int main(void) {
 
   menuHandlerInit();
 
+  // TODO - some comments would be nice.
 
   while(1) {
     surface_t *disp = display_get();

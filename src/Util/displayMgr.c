@@ -1,6 +1,7 @@
 #include "displayMgr.h"
 #include <libdragon.h>
 
+//TODO - where is this used and is it needed.
 /* PRIVATE state — not visible outside this file */
 static bool display_initialized = false;
 

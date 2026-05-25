@@ -4,6 +4,7 @@
 /**
  * @brief the different button
  */
+// TODO - This is kinda weird is it the action or is it the button?
 typedef enum MenuButtons {
   NO_BUTTON_SELECTED = -1,
   START_BUTTON,
