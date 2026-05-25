@@ -13,8 +13,8 @@ void screenMngLoadNext() {
   screenState.nextScreenState = NO_SCREEN;
 };
 
-screen_state_t* screenMngCurrentState() {
-  return &screenState;
+screen_state_e* screenMngCurrentState() {
+  return &screenState.currentScreenState;
 }
 
 screen_state_t* screenMngSetNext(screen_state_e nextScreen) {
