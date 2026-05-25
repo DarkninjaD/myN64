@@ -57,7 +57,7 @@ void menuHandleInput() {
 
 }
 
-void menuButton(sprite_t* sprite, float xCord, float yCord, char* message, menu_button_t button_t) {
+void menuButton(sprite_t* sprite, float xCord, float yCord, char* message, menu_button_e button_t) {
 
   // set mode
   rdpq_set_mode_standard();
@@ -85,7 +85,7 @@ void menuInput(joypad_inputs_t pOne) {
   menuHandleInput();
 }
 
-menu_button_t menuInputTest(joypad_buttons_t pOne) {
+menu_button_e menuInputTest(joypad_buttons_t pOne) {
   if(pOne.a || pOne.start) {
     menuState.action = SELECT;
   }
