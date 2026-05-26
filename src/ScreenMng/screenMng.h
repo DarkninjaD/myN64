@@ -8,16 +8,10 @@
  */
 typedef enum ScreenType {
   NO_SCREEN,
-  INIT,
-  INTRO,
+  LOGO,
+  TITLE_SCREEN,
   MAIN_MENU,
-  GAME_INIT,
   GAME_PLAY,
-  GAME_CUTSCEEN,
-  GAME_PAUSED,
-  GAME_END,
-  SCORE_SCREEN,
-  DEBUG,
   SCREEN_STATE_COUNT
 } screen_state_e;
 
