@@ -16,7 +16,7 @@
 
 ## 📁 Directory Structure
 
-```
+```bash
 Project/
 ├── assets/                  # Raw assets (PNGs, TTF fonts, MP3 audio, 3D GLB models)
 ├── filesystem/              # Compiled assets packed into the ROM's DFS archive
@@ -107,14 +107,19 @@ Because debugging directly on an N64 emulator or physical console can be extreme
 Tests require **Ruby** and a native host compiler (**GCC**). Once installed, run these from the project root:
 
 - Run all tests:
+
   ```bash
   ceedling test:all
   ```
+
 - Run a specific test module (omit the `test_` prefix and file extension):
+
   ```bash
   ceedling test:screenMng
   ```
+
 - Clean test artifacts:
+
   ```bash
   ceedling clobber
   ```
