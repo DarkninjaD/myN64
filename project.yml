@@ -1,0 +1,29 @@
+:project:
+  :use_exceptions: FALSE
+  :use_mocks: TRUE
+  :compile_threads: 1
+  :test_threads: 1
+  :build_root: build/test_artifacts # Keeps test files isolated from N64 build artifacts
+
+:paths:
+  :test:
+    - +:test/**
+  :source:
+    - +:src/** # Recursively finds ScreenMng/ and your other C files
+  :include:
+    - +:src/**
+  :support:
+    - test/support
+
+:defines:
+  :commmon: &common_defines []
+  :test:
+    - *common_defines
+  :test_preprocess:
+    - *common_defines
+
+:plugins:
+  :load_paths: []
+  :enabled:
+    - report_tests_pretty_stdout
+    - module_generator
