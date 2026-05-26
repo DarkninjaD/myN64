@@ -1,12 +1,12 @@
 #ifndef MAIN_MENU_H
 #define MAIN_MENU_H
 #include <libdragon.h>
+
+// TODO - This is kinda weird is it the action or is it the button?
 /**
  * @brief the different button
  */
-// TODO - This is kinda weird is it the action or is it the button?
 typedef enum MenuButtons {
-  NO_BUTTON_SELECTED = -1,
   START_BUTTON,
   SAVE_BUTTON,
   SETTING_BUTTON,
@@ -14,25 +14,21 @@ typedef enum MenuButtons {
   BUTTON_COUNT,
 } menu_button_e;
 
+// TODO - do I move the doc to the internal class?
 /**
  *  @brief Sets up the init state and loads assets of the main menu.
  */
-void menuHandlerInit();
+//void menuHandlerInit();
 
 /**
  *  @deprecated use to menuInputTest
  *  @brief
  */
-void menuInput(joypad_inputs_t pOne);
-
-/**
- *  @brief handle input from user on main menu.
- */
-menu_button_e menuInputTest(joypad_buttons_t pOne);
+//void menuInput(joypad_inputs_t pOne);
 
 /**
  *  @brief Creates the frame for main menu to be displayed.
  */
-void menuRender();
+menu_button_e menuRender();
 
 #endif

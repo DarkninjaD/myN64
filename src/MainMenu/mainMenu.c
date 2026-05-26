@@ -1,5 +1,7 @@
 #include <libdragon.h>
 #include "mainMenu.h"
+#include <t3d/t3d.h>
+#include "../Util/fontAssets.h"
 
 // TODO- better names: they are not selected at this point
 static rdpq_blitparms_t unselectedButtonParams = {.scale_x = .5, .scale_y = .5};
@@ -9,20 +11,20 @@ static int screen_width;
 static int screen_height;
 static sprite_t *btn_game;
 
-typedef struct {
-  int overItemIndex;
-  int action;
-} menu_state_t;
 
-
-enum MENU_ACTION {
+typedef enum MenuActions {
   NO_ACTION,
   SELECT,
   BACK,
   UP,
   DOWN,
   ACTION_COUNT
-};
+} menu_action_e;
+
+typedef struct {
+  menu_button_e overItemIndex;
+  menu_action_e action;
+} menu_state_t;
 
 static menu_state_t menuState;
 
@@ -41,7 +43,7 @@ void menuHandleInput() {
   case NO_ACTION:
     break;
   case SELECT:
-    menuState.action = NO_ACTION;
+    // no action needs to be done as it's handled higher up
     break;
   case UP:
     if (menuState.overItemIndex > 0) menuState.overItemIndex--;
@@ -51,20 +53,22 @@ void menuHandleInput() {
     if (menuState.overItemIndex < BUTTON_COUNT-1) menuState.overItemIndex++;
     menuState.action = NO_ACTION;
     break;
+  case BACK:
+    // do a back
+    break;
   default:
     break;
   }
 
 }
 
-//TODO - rename button_t to button_e
-void menuButton(sprite_t* sprite, float xCord, float yCord, char* message, menu_button_e button_t) {
+void menuButtonFactory(sprite_t* sprite, float xCord, float yCord, char* message, menu_button_e button_e) {
 
   // set mode
   rdpq_set_mode_standard();
 
   // Button Background
-  if(button_t == menuState.overItemIndex) {
+  if(button_e == menuState.overItemIndex) {
     rdpq_sprite_blit(sprite, xCord, yCord, &selectedButtonParams);
   } else {
     rdpq_sprite_blit(sprite, xCord, yCord, &unselectedButtonParams);
@@ -73,21 +77,7 @@ void menuButton(sprite_t* sprite, float xCord, float yCord, char* message, menu_
   rdpq_text_print(NULL,3,xCord+5,yCord+13, message);
 }
 
-// TODO - kill this function and just have menuInputTest Also rename it.
-void menuInput(joypad_inputs_t pOne) {
-  if(pOne.btn.a || pOne.btn.start) {
-    menuState.action = SELECT;
-  }
-  if(pOne.btn.d_up|| pOne.stick_x > 40) {
-    menuState.action = UP;
-  }
-  if(pOne.btn.d_down || pOne.stick_x < -40) {
-    menuState.action = DOWN;
-  }
-  menuHandleInput();
-}
-
-menu_button_e menuInputTest(joypad_buttons_t pOne) {
+void menuInput(joypad_buttons_t pOne) {
   if(pOne.a || pOne.start) {
     menuState.action = SELECT;
   }
@@ -98,14 +88,58 @@ menu_button_e menuInputTest(joypad_buttons_t pOne) {
     menuState.action = DOWN;
   }
   menuHandleInput();
-  return -1;
 }
 
-void menuRender() {
+void cleanUp() {}
 
-    menuButton(btn_game, screen_width /2 - 50, screen_height/2 +10, " Start", START_BUTTON);
-    menuButton(btn_game, screen_width /2 - 50, screen_height/2 +30, " Saves", SAVE_BUTTON);
-    menuButton(btn_game, screen_width /2 - 50, screen_height/2 +50, " Setting", SETTING_BUTTON);
-    menuButton(btn_game, screen_width /2 - 50, screen_height/2 +70, " Exit", EXIT_BUTTON);
+menu_button_e menuRender() {
 
+  display_init(RESOLUTION_640x480, DEPTH_16_BPP, 3, GAMMA_NONE, FILTERS_DISABLED);
+
+  // Font
+  rdpq_font_t *fnt0 = rdpq_font_load("rom:/sixtyfour.font64");
+  rdpq_font_t *fnt1 = rdpq_font_load("rom:/revalia.font64");
+  rdpq_font_t *fnt2 = rdpq_font_load("rom:/squarewave.font64");
+
+  rdpq_text_register_font(FONT_SIXTYFOUR, fnt0);
+  rdpq_text_register_font(FONT_REVALIA, fnt1);
+  rdpq_text_register_font(FONT_SQUAREWAVE, fnt2);
+
+  rdpq_font_style(fnt0, 0 , &(rdpq_fontstyle_t) {
+    .color = RGBA32(0x82, 0x30, 0x38, 0xFF),
+    .outline_color = RGBA32 (255,255,255,255),
+  });
+
+  rdpq_font_style(fnt1, 0 , &(rdpq_fontstyle_t) {
+    .color = RGBA32(0x82, 0x30, 0x38, 0xFF),
+    .outline_color = RGBA32 (255,255,255,255),
+  });
+
+  rdpq_font_style(fnt2, 0 , &(rdpq_fontstyle_t) {
+    .color = RGBA32(0x82, 0x30, 0x38, 0xFF),
+    .outline_color = RGBA32 (255,255,255,255),
+  });
+
+    menuHandlerInit();
+
+    while(menuState.action != SELECT) {
+      joypad_poll();
+      joypad_buttons_t playerOneBtn = joypad_get_buttons_pressed(JOYPAD_PORT_1);
+
+      surface_t *disp = display_get();
+      rdpq_attach_clear(disp, NULL);
+
+      menuInput(playerOneBtn);
+
+      menuButtonFactory(btn_game, screen_width /2 - 50, screen_height/2 +10, " Start", START_BUTTON);
+      menuButtonFactory(btn_game, screen_width /2 - 50, screen_height/2 +30, " Saves", SAVE_BUTTON);
+      menuButtonFactory(btn_game, screen_width /2 - 50, screen_height/2 +50, " Setting", SETTING_BUTTON);
+      menuButtonFactory(btn_game, screen_width /2 - 50, screen_height/2 +70, " Exit", EXIT_BUTTON);
+
+      rdpq_detach_show();
+    }
+    rspq_wait();
+    cleanUp();
+    display_close();
+    return menuState.overItemIndex;
 }

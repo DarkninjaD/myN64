@@ -25,7 +25,7 @@ int main(void) {
 
   /*
   -------------------------------------------------
-  Asset load //TODO - This should be pulled into it's own file.
+  Asset load //TODO - the asset are loaded in and out per screen.
   -------------------------------------------------
   */
   // Font
@@ -58,42 +58,58 @@ int main(void) {
   Main Menu screen //TODO - maybe a bit of clean up bellow before the while loop.
   -------------------------------------------------
   */
-  //display_init(RESOLUTION_320x240, DEPTH_16_BPP, 2, GAMMA_NONE, FILTERS_RESAMPLE);
 
-  //static sprite_t *spaceship;
-  //spaceship = sprite_load("rom:/spaceship.sprite");
 
-  //joypad_inputs_t playerOne;
-  joypad_buttons_t playerOneBtn;
-
-  //menuHandlerInit();
 
   // TODO - some comments would be nice.
 
   while(1) {
-    //surface_t *disp = display_get();
-    //joypad_poll();
-    //playerOne = joypad_get_inputs(JOYPAD_PORT_1);
-    //playerOneBtn = joypad_get_buttons_pressed(JOYPAD_PORT_1);
 
-    //rdpq_attach_clear(disp, NULL);
+    //TODO- double switch is... bad
 
     switch(screen_state->currentScreenState) {
       case NO_SCREEN:
         screenMngLoadNext();
         break;
       case LOGO:
-        //introScreen();
-        //n64brew_logo();
-        //libdragon_logo();
+        // TODO - add button press to continue.
+        n64brew_logo();
+        libdragon_logo();
         tiny3d_logo();
-        //screenMngSetNext(MAIN_MENU);
+        //introScreen();
+        screenMngSetNext(MAIN_MENU);
+        screenMngLoadNext();
         break;
       case TITLE_SCREEN:
       break;
       case MAIN_MENU:
-        menuRender();
-        menuInputTest(playerOneBtn);
+        menu_button_e nextScreen = menuRender();
+
+        switch (nextScreen)
+        {
+        case START_BUTTON:
+          screenMngSetNext(GAME_PLAY);
+          break;
+        case SAVE_BUTTON:
+          /* code */
+          screenMngSetNext(GAME_PLAY);
+          break;
+        case SETTING_BUTTON:
+          /* code */
+          screenMngSetNext(GAME_PLAY);
+          break;
+        case EXIT_BUTTON:
+          /* code */
+          screenMngSetNext(GAME_PLAY);
+          break;
+        case BUTTON_COUNT:
+          /* code */
+          break;
+        default:
+          break;
+        }
+
+        screenMngLoadNext(GAME_PLAY);
         break;
       case GAME_PLAY:
         // Draw gameplay loop here
