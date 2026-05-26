@@ -26,8 +26,8 @@ typedef enum ScreenType {
  *
  */
 typedef struct ScreenState {
-  int currentScreenState;
-  int nextScreenState;
+  screen_state_e currentScreenState;
+  screen_state_e nextScreenState;
 } screen_state_t ;
 
 /**

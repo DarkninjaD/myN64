@@ -29,28 +29,28 @@ int main(void) {
   -------------------------------------------------
   */
   // Font
-  //rdpq_font_t *fnt0 = rdpq_font_load("rom:/sixtyfour.font64");
-  //rdpq_font_t *fnt1 = rdpq_font_load("rom:/revalia.font64");
-  //rdpq_font_t *fnt2 = rdpq_font_load("rom:/squarewave.font64");
+  rdpq_font_t *fnt0 = rdpq_font_load("rom:/sixtyfour.font64");
+  rdpq_font_t *fnt1 = rdpq_font_load("rom:/revalia.font64");
+  rdpq_font_t *fnt2 = rdpq_font_load("rom:/squarewave.font64");
 
-  //rdpq_text_register_font(FONT_SIXTYFOUR, fnt0);
-  //rdpq_text_register_font(FONT_REVALIA, fnt1);
-  //rdpq_text_register_font(FONT_SQUAREWAVE, fnt2);
+  rdpq_text_register_font(FONT_SIXTYFOUR, fnt0);
+  rdpq_text_register_font(FONT_REVALIA, fnt1);
+  rdpq_text_register_font(FONT_SQUAREWAVE, fnt2);
 
-  //rdpq_font_style(fnt0, 0 , &(rdpq_fontstyle_t) {
-  //  .color = RGBA32(0x82, 0x30, 0x38, 0xFF),
-  //  .outline_color = RGBA32 (255,255,255,255),
-  //});
+  rdpq_font_style(fnt0, 0 , &(rdpq_fontstyle_t) {
+    .color = RGBA32(0x82, 0x30, 0x38, 0xFF),
+    .outline_color = RGBA32 (255,255,255,255),
+  });
 
-  //rdpq_font_style(fnt1, 0 , &(rdpq_fontstyle_t) {
-  //  .color = RGBA32(0x82, 0x30, 0x38, 0xFF),
-  //  .outline_color = RGBA32 (255,255,255,255),
-  //});
+  rdpq_font_style(fnt1, 0 , &(rdpq_fontstyle_t) {
+    .color = RGBA32(0x82, 0x30, 0x38, 0xFF),
+    .outline_color = RGBA32 (255,255,255,255),
+  });
 
-  //rdpq_font_style(fnt2, 0 , &(rdpq_fontstyle_t) {
-  //  .color = RGBA32(0x82, 0x30, 0x38, 0xFF),
-  //  .outline_color = RGBA32 (255,255,255,255),
-  //});
+  rdpq_font_style(fnt2, 0 , &(rdpq_fontstyle_t) {
+    .color = RGBA32(0x82, 0x30, 0x38, 0xFF),
+    .outline_color = RGBA32 (255,255,255,255),
+  });
 
 
   /*
