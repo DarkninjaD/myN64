@@ -3,5 +3,6 @@
 
     extern void n64brew_logo();
     extern void libdragon_logo();
+    extern void tiny3d_logo();
 
 #endif

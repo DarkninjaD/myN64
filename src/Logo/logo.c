@@ -2,6 +2,7 @@
 #include <t3d/t3d.h>
 #include <t3d/t3dmath.h>
 #include <t3d/t3dmodel.h>
+#include <math.h>
 
 #define SPINSPEED 0.9f
 
@@ -68,7 +69,7 @@ void n64brew_logo(void)
         } else {
             break;
         }
-        
+
         rdpq_attach(display_get(), display_get_zbuf());
         rdpq_clear(VAN_DYKE);
         rdpq_clear_z(ZBUF_MAX);
@@ -85,7 +86,7 @@ void n64brew_logo(void)
             t3d_viewport_attach(&viewport);
             t3d_light_set_ambient(colorAmbient);
             t3d_light_set_count(0);
-            
+
             if (sync) rspq_syncpoint_wait(sync);
             t3d_mat4fp_from_srt_euler(mtx,
                 (float[3]){scale, scale, scale},
@@ -98,7 +99,7 @@ void n64brew_logo(void)
             sync = rspq_syncpoint_new();
             rdpq_sync_pipe();
         }
-        
+
         if (anim_part >= 2 && fade_white > 0.0f) {
             rdpq_set_mode_standard();
             if (anim_part == 4)
@@ -158,12 +159,12 @@ void libdragon_logo(void)
     reset();
     while (1) {
         mixer_try_play();
-        
+
         // Calculate animation part:
         // 0: rotate dragon head
         // 1: rotate dragon body and tail, scale up
         // 2: scroll dragon logo
-        // 3: fade out 
+        // 3: fade out
         uint32_t tt = get_ticks_ms() - ms0;
         if (tt < 1000) anim_part = 0;
         else if (tt < 1500) anim_part = 1;
@@ -197,9 +198,9 @@ void libdragon_logo(void)
         // To simulate the dragon jumping out, we scissor the head so that
         // it appears as it moves.
         if (angle1 > 1.0f) {
-            // Initially, also scissor horizontally, 
+            // Initially, also scissor horizontally,
             // so that the head tail is not visible on the right.
-            rdpq_set_scissor(0, 0, X0+300, Y0+240);    
+            rdpq_set_scissor(0, 0, X0+300, Y0+240);
         } else {
             rdpq_set_scissor(0, 0, 640, Y0+240);
         }
@@ -210,7 +211,7 @@ void libdragon_logo(void)
         rdpq_mode_blender(RDPQ_BLENDER_MULTIPLY);
         rdpq_mode_combiner(RDPQ_COMBINER1((0,0,0,PRIM),(TEX0,0,PRIM,0)));
         rdpq_set_prim_color(red);
-        rdpq_sprite_blit(d1, X0+216, Y0+205, &(rdpq_blitparms_t){ 
+        rdpq_sprite_blit(d1, X0+216, Y0+205, &(rdpq_blitparms_t){
             .theta = angle1, .scale_x = scale1+1, .scale_y = scale1+1,
             .cx = 176, .cy = 171,
         });
@@ -243,12 +244,12 @@ void libdragon_logo(void)
             color.r *= 1-scale3; color.g *= 1-scale3; color.b *= 1-scale3;
             rdpq_set_prim_color(color);
 
-            rdpq_sprite_blit(d2, X0+246, Y0+230, &(rdpq_blitparms_t){ 
+            rdpq_sprite_blit(d2, X0+246, Y0+230, &(rdpq_blitparms_t){
                 .theta = angle2, .scale_x = 1-scale2, .scale_y = 1-scale2,
                 .cx = 145, .cy = 113,
             });
 
-            rdpq_sprite_blit(d3, X0+266, Y0+256, &(rdpq_blitparms_t){ 
+            rdpq_sprite_blit(d3, X0+266, Y0+256, &(rdpq_blitparms_t){
                 .theta = -angle3, .scale_x = 1-scale3, .scale_y = 1-scale3,
                 .cx = 91, .cy = 24,
             });
@@ -270,5 +271,126 @@ void libdragon_logo(void)
     sprite_free(d3);
     sprite_free(d4);
     wav64_close(&music);
+    display_close();
+}
+
+void tiny3d_logo(void)
+{
+    const color_t BG_COLOR = RGBA32(11, 11, 18, 255);
+
+    display_init(RESOLUTION_640x480, DEPTH_16_BPP, 3, GAMMA_NONE, FILTERS_RESAMPLE);
+    t3d_init((T3DInitParams){});
+
+    T3DModel *dodec = t3d_model_load("rom:/core/light.t3dm");
+    sprite_t *tinyLogo = sprite_load("rom:/core/tiny3d_logo.sprite");
+
+    T3DViewport viewport = t3d_viewport_create();
+    T3DVec3 camPos = {{0, 0.0f, 40.0f}};
+    T3DVec3 camTarget = {{0, 0.0f, 0.0f}};
+
+    T3DMat4FP *mtx = malloc_uncached(sizeof(T3DMat4FP));
+    rspq_syncpoint_t sync = 0;
+
+    float mt0 = get_ticks_ms();
+    float total_duration = 5000.0f; // 5 seconds
+
+    while (1)
+    {
+        float tt = get_ticks_ms() - mt0;
+        if (tt >= total_duration) {
+            break;
+        }
+
+        float scale = 0.0f;
+        float opacity = 0.0f;
+
+        if (tt < 1000.0f) {
+            float t = tt / 1000.0f;
+            scale = ease_out_quad(tt, 0.0f, 0.22f, 1000.0f);
+            opacity = t;
+        } else if (tt < 4000.0f) {
+            scale = 0.22f;
+            opacity = 1.0f;
+        } else {
+            float t = (tt - 4000.0f) / 1000.0f;
+            scale = 0.22f * (1.0f - t);
+            opacity = 1.0f - t;
+        }
+
+        // Color shifting logic: shift colors smoothly between red, green, blue
+        float color_cycle = (tt / 1000.0f) * 1.5f;
+        float p = fmodf(color_cycle, 3.0f);
+        uint8_t r = 0, g = 0, b = 0;
+        if (p < 1.0f) {
+            r = (uint8_t)((1.0f - p) * 255.0f);
+            g = (uint8_t)(p * 255.0f);
+            b = 0;
+        } else if (p < 2.0f) {
+            float t = p - 1.0f;
+            r = 0;
+            g = (uint8_t)((1.0f - t) * 255.0f);
+            b = (uint8_t)(t * 255.0f);
+        } else {
+            float t = p - 2.0f;
+            r = (uint8_t)(t * 255.0f);
+            g = 0;
+            b = (uint8_t)((1.0f - t) * 255.0f);
+        }
+
+        color_t current_color = RGBA32(
+            (uint8_t)(r * opacity),
+            (uint8_t)(g * opacity),
+            (uint8_t)(b * opacity),
+            255
+        );
+
+        float rot_angle = (tt / 1000.0f);
+        float rotX = rot_angle * 1.5f;
+        float rotY = rot_angle * 2.0f;
+        float rotZ = rot_angle * 0.8f;
+
+        rdpq_attach(display_get(), display_get_zbuf());
+        rdpq_clear(BG_COLOR);
+        rdpq_clear_z(ZBUF_MAX);
+
+        t3d_frame_start();
+        t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(80.0f), 10.0f, 100.0f);
+        t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(T3DVec3){{0, 1, 0}});
+        t3d_viewport_attach(&viewport);
+
+        uint8_t colorAmbient[4] = {0xff, 0xff, 0xff, 0xff};
+        t3d_light_set_ambient(colorAmbient);
+        t3d_light_set_count(0);
+
+        if (sync) rspq_syncpoint_wait(sync);
+        t3d_mat4fp_from_srt_euler(mtx,
+            (float[3]){scale, scale, scale},
+            (float[3]){rotX, rotY, rotZ},
+            (float[3]){0.0f, 4.0f, 0.0f}
+        );
+        t3d_matrix_push(mtx);
+        rdpq_set_prim_color(current_color);
+        t3d_model_draw(dodec);
+        t3d_matrix_pop(1);
+        sync = rspq_syncpoint_new();
+
+        rdpq_sync_pipe();
+
+        rdpq_set_mode_standard();
+        rdpq_mode_alphacompare(1);
+        rdpq_mode_blender(RDPQ_BLENDER_MULTIPLY);
+
+        rdpq_sprite_blit(tinyLogo, 100, 280, &(rdpq_blitparms_t){
+            .scale_x = .5,
+            .scale_y = .5,
+        });
+        rdpq_detach_show();
+    }
+
+    wait_ms(100);
+    rspq_wait();
+    t3d_model_free(dodec);
+    free_uncached(mtx);
+    t3d_destroy();
     display_close();
 }

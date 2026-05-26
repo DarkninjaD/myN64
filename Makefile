@@ -65,6 +65,7 @@ filesystem/core/dragon1.sprite: MKSPRITE_FLAGS += --format I4 -c 2
 filesystem/core/dragon2.sprite: MKSPRITE_FLAGS += --format I4 -c 2
 filesystem/core/dragon3.sprite: MKSPRITE_FLAGS += --format I4 -c 2
 filesystem/core/dragon4.sprite: MKSPRITE_FLAGS += --format I4 -c 2
+filesystem/core/tiny3d_logo.sprite: MKSPRITE_FLAGS += --tiles 32,32 --format I4 -c 2
 
 filesystem/core/dragon.wav64: AUDIOCONV_FLAGS += --wav-resample 32000 --wav-mono --wav-compress 3
 
