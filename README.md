@@ -1,6 +1,6 @@
-# myN64 - Nintendo 64 Game & Engine Framework
+# myN64 - Homebrew Nintendo 64 Game
 
-`myN64` is a custom game framework and demonstration codebase for the Nintendo 64 (N64) hardware. Built on top of the modern open-source [libdragon](https://github.com/dragonmind/libdragon) SDK and the [Tiny3D](https://github.com/flynn/t3d) graphics library, this project features a modular screen state machine, custom font loading, audio playback, 2D sprite animations, and real-time 3D rendering.
+`myN64` is a Homebrew Nintendo 64 Game. Using open-source [libdragon](https://github.com/dragonmind/libdragon) SDK and the [Tiny3D](https://github.com/flynn/t3d) graphics library, this project is meant to grow and learn N64 development.
 
 ---
 
@@ -19,7 +19,7 @@
 ```bash
 Project/
 ├── assets/                  # Raw assets (PNGs, TTF fonts, MP3 audio, 3D GLB models)
-├── filesystem/              # Compiled assets packed into the ROM's DFS archive
+├── filesystem/              # Compiled assets packed into the ROM's DFS archive. Generated at compiled time (Libdragon)
 ├── src/                     # Game source code
 ├── test/                    # Host-side unit test files
 │   └── support/             # Mock header directories (e.g. stub libdragon.h)
@@ -31,15 +31,15 @@ Project/
 
 ## 🛠️ The Asset Pipeline (Makefile)
 
-To build a Nintendo 64 ROM, all source assets must be converted into MIPS-friendly binary formats and packed into a DFS (Directory File System) image. The project [Makefile](file:///wsl.localhost/Ubuntu/home/zourbomb/workspace/n64dev/myN64/Makefile) automatically processes the `assets/` directory using specialized Libdragon tools.
+To build a Nintendo 64 ROM, all source assets must be converted into MIPS-friendly binary formats and packed into a Directory File System image. The project [Makefile](./Makefile) automatically processes the `assets/` directory using specialized Libdragon tools.
 
 ### Sprite Conversion (`n64mksprite`)
 
 - Converts PNG images into N64 sprites.
 - **Optimization Flags**:
-  - `--format CI4`: 4-bit Color Indexed mode (16-color palette) to optimize texture RAM (TMEM) footprint (used for `brew_logo`).
-  - `--format I4`: 4-bit Intensity (grayscale transparency) mode (used for `dragon` logo segments).
-  - `--format RGBA16`: High-fidelity 16-bit color format (used for buttons and gameplay assets).
+  - `--format CI4`: 4-bit Color Indexed mode (16-color palette) to optimize texture RAM (TMEM) footprint.
+  - `--format I4`: 4-bit Intensity (grayscale transparency) mode.
+  - `--format RGBA16`: High-fidelity 16-bit color format.
   - `-c 2`: Enables Codec 2 (LZ4 compression) for compact ROM storage.
 
 ### 3D Models (`t3dgltf` & `mkasset`)
@@ -50,7 +50,7 @@ To build a Nintendo 64 ROM, all source assets must be converted into MIPS-friend
 
 - Processes MP3 tracks into standard `.wav64` format.
 - **Optimization Flags**:
-  - `--wav-resample 32000`: Resamples to 32kHz to standardise mixer frequencies.
+  - `--wav-resample 32000`: Resamples to 32kHz to standardize mixer frequencies.
   - `--wav-mono`: Downmixes stereo channels to mono, saving 50% memory size.
   - `--wav-compress 3`: Compresses using Codec 3 (VADPCM) for hardware-accelerated decompression.
 
@@ -65,7 +65,7 @@ To build a Nintendo 64 ROM, all source assets must be converted into MIPS-friend
 ### Prerequisites
 
 1. **Libdragon Toolchain**: Ensure you have the `libdragon` compilation toolchain installed on your Linux machine or WSL instance.
-2. **Tiny3D (T3D)**: The Tiny3D library must be installed in your `$N64_INST` environment.
+2. **Tiny3D (T3D)**: The Tiny3D library must be installed in your libdragon toolchain.
 
 ### Compile the ROM
 
@@ -75,7 +75,7 @@ To compile the game source, run the asset pipeline, and build the final MIPS ROM
 make
 ```
 
-This produces `main.z64` (the Nintendo 64 ROM).
+This produces `main.z64` the Nintendo 64 ROM at the root of the projects directory.
 
 ### Cleaning Build Files
 
@@ -135,6 +135,7 @@ For detailed guidelines and code examples, read the [Testing Strategy Guide.md](
 ## 🎨 Naming Conventions
 
 To maintain readability and consistency across the codebase, please adhere to the following naming standards:
+NOTE The standards are not being followed and haven't been decided. Just make a stub here for the future.
 
 - **File Names**: `PascalCase` (e.g., `screenMng.c`, `introScreen.c`)
 - **Functions**: `camelCase` (e.g., `screenMngInit()`, `menuInputTest()`)

@@ -1,15 +1,25 @@
 {
   "cSpell.words": [
+    "audioconv",
     "Ceedling",
+    "dgltf",
+    "Downmixes",
     "flashcart",
     "fontstyle",
+    "GLTF",
+    "grayscale",
     "joypad",
     "libdragon",
     "Libdragons",
+    "mkasset",
+    "mkfont",
+    "mksprite",
     "pathing",
     "rdpq",
     "revalia",
     "sixtyfour",
-    "squarewave"
+    "squarewave",
+    "TMEM",
+    "VADPCM"
   ]
 }
