@@ -6,7 +6,8 @@
         "${workspaceFolder}/**",
         "${env:N64_INST}/**",
         "${env:N64_INST}/include/**",
-        "${env:N64_INST}/mips64-elf/include/**"
+        "${env:N64_INST}/mips64-elf/include/**",
+        "${env:GEM_HOME}/ceedling-*/vendor/**"
       ],
       "defines": [
         "_LANGUAGE_C",

@@ -19,5 +19,5 @@ void test_InitShouldSetCorrectDefaultStates(void) {
 void test_LoadNextShouldTransitionState(void) {
     screenMngLoadNext();
     screen_state_e* current = screenMngCurrentState();
-    TEST_ASSERT_EQUAL_INT(INIT, *current);
+    TEST_ASSERT_EQUAL_INT(LOGO, *current);
 }

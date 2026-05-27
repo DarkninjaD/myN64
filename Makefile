@@ -94,7 +94,7 @@ include $(N64_INST)/include/t3d.mk
 ## -------------------------------------------------
 ## Main Rule
 ## -------------------------------------------------
-all: $(ROMNAME).z64
+all: test $(ROMNAME).z64
 
 # Tells libdragon that the final ROM requires the compiled filesystem
 $(ROMNAME).z64: $(BUILD_DIR)/$(ROMNAME).dfs
@@ -145,3 +145,12 @@ clean:
 	rm -rf $(BUILD_DIR) $(FILESYSTEM_DIR) *.z64
 
 .PHONY: all clean
+
+## -------------------------------------------------
+##  Unit Test rule
+## -------------------------------------------------
+test:
+	@echo "Running Unit tests using Ceedling..."
+	ceedling test:all
+
+.PHONY: test
