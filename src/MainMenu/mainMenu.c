@@ -80,6 +80,7 @@ void menuButtonFactory(sprite_t* sprite, float xCord, float yCord, char* message
 void menuInput(joypad_buttons_t pOne) {
   if(pOne.a || pOne.start) {
     menuState.action = SELECT;
+    fprintf(stderr, "it was select\n");
   }
   if(pOne.d_up) {
     menuState.action = UP;

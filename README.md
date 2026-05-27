@@ -31,7 +31,7 @@ Project/
 
 ## 🛠️ The Asset Pipeline (Makefile)
 
-To build a Nintendo 64 ROM, all source assets must be converted into MIPS-friendly binary formats and packed into a Directory File System image. The project [Makefile](./Makefile) automatically processes the `assets/` directory using specialized Libdragon tools.
+To build a Nintendo 64 ROM, all source assets must be converted into MIPS-friendly binary formats and packed into a Dragon File System image. The project [Makefile](./Makefile) automatically processes the `assets/` directory using specialized Libdragon tools.
 
 ### Sprite Conversion (`n64mksprite`)
 
@@ -123,6 +123,15 @@ Tests require **Ruby** and a native host compiler (**GCC**). Once installed, run
   ```bash
   ceedling clobber
   ```
+
+### How to Debug
+
+Using the ISViewer in ares you are able to log out to the ares console output via stderr. for example.
+
+```c
+fprintf(stderr, "hello debug");
+fprintf(stderr, "hello debug");
+```
 
 ### Toolchain Mismatch (Hardware Stubs)
 

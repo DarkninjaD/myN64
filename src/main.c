@@ -23,7 +23,13 @@ int main(void) {
   // pull thing from cart
   dfs_init(DFS_DEFAULT_LOCATION);
 
-  /*
+  //need for terminal loging.
+  debug_init_emulog();
+
+ // Explicitly crash or warn if 8MiB is required but missing
+ assert_memory_expanded();
+
+ /*
   -------------------------------------------------
   Asset load //TODO - the asset are loaded in and out per screen.
   -------------------------------------------------
@@ -84,11 +90,11 @@ int main(void) {
       break;
       case MAIN_MENU:
         menu_button_e nextScreen = menuRender();
-
         switch (nextScreen)
         {
         case START_BUTTON:
           screenMngSetNext(GAME_PLAY);
+          fprintf(stderr, "it was in fact start button \n");
           break;
         case SAVE_BUTTON:
           /* code */
@@ -108,11 +114,12 @@ int main(void) {
         default:
           break;
         }
-
-        screenMngLoadNext(GAME_PLAY);
+        fprintf(stderr, "we are moving on to next load \n");
+        screenMngLoadNext();
         break;
       case GAME_PLAY:
         // Draw gameplay loop here
+        fprintf(stderr, "should be here... \n");
         rdpq_text_print(NULL, FONT_SQUAREWAVE, 20, 20, "GAMEPLAY LOADED");
         break;
       case SCREEN_STATE_COUNT: // not being used
